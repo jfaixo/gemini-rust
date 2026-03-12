@@ -309,7 +309,15 @@ impl ContentBuilder {
     pub fn with_function_calling_mode(mut self, mode: FunctionCallingMode) -> Self {
         self.tool_config
             .get_or_insert_with(Default::default)
-            .function_calling_config = Some(FunctionCallingConfig { mode });
+            .function_calling_config = Some(FunctionCallingConfig { mode, allowed_function_names: None });
+        self
+    }
+
+    /// Sets the function calling mode for the request.
+    pub fn with_function_calling_mode_and_allowed_function_names(mut self, mode: FunctionCallingMode, allowed_function_names: Vec<String>) -> Self {
+        self.tool_config
+            .get_or_insert_with(Default::default)
+            .function_calling_config = Some(FunctionCallingConfig { mode, allowed_function_names: Some(allowed_function_names) });
         self
     }
 

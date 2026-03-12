@@ -448,10 +448,13 @@ pub struct ToolConfig {
 }
 
 /// Configuration for function calling
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct FunctionCallingConfig {
     /// The mode for function calling
     pub mode: FunctionCallingMode,
+
+    #[serde(skip_serializing_if = "Option::is_none", rename = "allowedFunctionNames")]
+    pub allowed_function_names: Option<Vec<String>>,
 }
 
 /// Mode for function calling
@@ -460,10 +463,15 @@ pub struct FunctionCallingConfig {
 pub enum FunctionCallingMode {
     /// The model may use function calling
     Auto,
-    /// The model must use function calling
     Any,
     /// The model must not use function calling
     None,
+}
+
+impl Default for FunctionCallingMode {
+    fn default() -> Self {
+        FunctionCallingMode::Auto
+    }
 }
 
 /// Retrieval configuration for location-based tools
